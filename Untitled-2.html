@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal de Enlaces Rápidos</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f172a, #1e293b, #334155);
+            color: #e2e8f0;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 10% 20%, rgba(59, 130, 246, 0.15) 0%, transparent 25%),
+                radial-gradient(circle at 90% 80%, rgba(236, 72, 153, 0.15) 0%, transparent 25%),
+                radial-gradient(circle at 50% 50%, rgba(74, 222, 128, 0.1) 0%, transparent 35%);
+            z-index: -1;
+        }
+        
+        header {
+            text-align: center;
+            margin: 25px 0 35px;
+            width: 100%;
+            max-width: 900px;
+            position: relative;
+            z-index: 10;
+        }
+        
+        h1 {
+            font-size: 3.2rem;
+            margin-bottom: 12px;
+            background: linear-gradient(to right, #60a5fa, #8b5cf6, #ec4899, #f43f5e);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
+            letter-spacing: -0.5px;
+            position: relative;
+            display: inline-block;
+        }
+        
+        h1::after {
+            content: "";
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 70%;
+            height: 4px;
+            background: linear-gradient(to right, #60a5fa, #8b5cf6, #ec4899);
+            border-radius: 2px;
+        }
+        
+        .subtitle {
+            font-size: 1.35rem;
+            color: #cbd5e1;
+            margin-top: 25px;
+            max-width: 700px;
+            line-height: 1.6;
+            font-weight: 300;
+        }
+        
+        .container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 28px;
+            width: 100%;
+            max-width: 1400px;
+            padding: 15px;
+            position: relative;
+            z-index: 5;
+        }
+        
+        .logo-card {
+            background: rgba(30, 41, 59, 0.75);
+            border-radius: 24px;
+            padding: 30px 25px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            transition: all 0.45s cubic-bezier(0.165, 0.84, 0.44, 1);
+            box-shadow: 
+                0 10px 25px -5px rgba(0, 0, 0, 0.4),
+                0 8px 10px -6px rgba(0, 0, 0, 0.35),
+                inset 0 0 25px rgba(255, 255, 255, 0.07);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+        
+        .logo-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0) 70%);
+            transform: scale(0);
+            transition: transform 0.6s ease-out;
+            z-index: 0;
+            opacity: 0.7;
+        }
+        
+        .logo-card:hover {
+            transform: translateY(-12px) scale(1.035);
+            background: rgba(35, 48, 68, 0.92);
+            box-shadow: 
+                0 15px 35px -5px rgba(0, 0, 0, 0.55),
+                0 12px 15px -6px rgba(0, 0, 0, 0.45),
+                inset 0 0 35px rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.25);
+            z-index: 20;
+        }
+        
+        .logo-card:hover::before {
+            transform: scale(1);
+        }
+        
+        .logo-link {
+            display: block;
+            width: 100%;
+            height: 100%;
+            text-decoration: none;
+            color: inherit;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .logo-container {
+            width: 110px;
+            height: 110px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 22px;
+            position: relative;
+            z-index: 3;
+            transition: all 0.4s ease;
+        }
+        
+        .logo-card:hover .logo-container {
+            transform: scale(1.18) rotate(3deg);
+            filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.4));
+        }
+        
+        .logo-img {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+            transition: all 0.35s ease;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.35));
+            border-radius: 8px;
+        }
+        
+        .logo-name {
+            font-size: 1.95rem;
+            font-weight: 800;
+            margin-bottom: 12px;
+            background: linear-gradient(to right, #f1f5f9, #cbd5e1);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+            letter-spacing: -0.5px;
+        }
+        
+        .logo-desc {
+            font-size: 1.12rem;
+            color: #94a3b8;
+            line-height: 1.55;
+            font-weight: 300;
+            transition: color 0.3s ease;
+        }
+        
+        .logo-card:hover .logo-desc {
+            color: #e2e8f0;
+        }
+        
+        /* Colores temáticos por servicio */
+        .accuweather { background-color: rgba(37, 99, 235, 0.18); }
+        .devdocs { background-color: rgba(74, 222, 128, 0.15); }
+        .calendar { background-color: rgba(249, 115, 22, 0.18); }
+        .gmail { background-color: rgba(220, 38, 38, 0.18); }
+        .youtube { background-color: rgba(249, 115, 22, 0.15); }
+        .pinterest { background-color: rgba(236, 72, 153, 0.18); }
+        .classroom { background-color: rgba(34, 197, 94, 0.18); }
+        .y2mate { background-color: rgba(124, 58, 237, 0.18); }
+        
+        .accuweather:hover { background-color: rgba(59, 130, 246, 0.32); }
+        .devdocs:hover { background-color: rgba(34, 197, 94, 0.32); }
+        .calendar:hover { background-color: rgba(251, 146, 60, 0.32); }
+        .gmail:hover { background-color: rgba(248, 113, 113, 0.32); }
+        .youtube:hover { background-color: rgba(249, 115, 22, 0.32); }
+        .pinterest:hover { background-color: rgba(236, 72, 153, 0.32); }
+        .classroom:hover { background-color: rgba(34, 197, 94, 0.32); }
+        .y2mate:hover { background-color: rgba(147, 51, 234, 0.32); }
+        
+        footer {
+            margin-top: 45px;
+            text-align: center;
+            padding: 25px;
+            color: #64748b;
+            font-size: 1.15rem;
+            max-width: 850px;
+            line-height: 1.7;
+            position: relative;
+            z-index: 10;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            width: 100%;
+        }
+        
+        .footer-note {
+            display: inline-block;
+            background: rgba(15, 23, 42, 0.85);
+            padding: 8px 22px;
+            border-radius: 50px;
+            margin-top: 12px;
+            font-style: italic;
+            font-size: 1.05rem;
+            border: 1px solid rgba(96, 165, 250, 0.3);
+        }
+        
+        @media (max-width: 1024px) {
+            .container {
+                grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+                gap: 24px;
+            }
+            h1 { font-size: 2.9rem; }
+        }
+        
+        @media (max-width: 768px) {
+            h1 { 
+                font-size: 2.65rem;
+                margin-bottom: 10px;
+            }
+            h1::after { width: 65%; bottom: -6px; }
+            .subtitle { font-size: 1.2rem; margin-top: 20px; }
+            .container {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+                gap: 22px;
+                padding: 10px;
+            }
+            .logo-card { padding: 25px 20px; }
+            .logo-container { width: 95px; height: 95px; }
+            .logo-name { font-size: 1.75rem; }
+            .logo-desc { font-size: 1.05rem; }
+        }
+        
+        @media (max-width: 480px) {
+            h1 { font-size: 2.35rem; }
+            .subtitle { font-size: 1.08rem; max-width: 95%; }
+            .container { grid-template-columns: 1fr; max-width: 520px; }
+            .logo-card { 
+                padding: 28px 22px;
+                border-radius: 22px;
+            }
+            .logo-container { width: 100px; height: 100px; }
+            .logo-name { font-size: 1.85rem; }
+            footer { padding: 20px 15px; font-size: 1.05rem; }
+            .footer-note { padding: 7px 18px; font-size: 0.98rem; }
+        }
+        
+        /* Animación de entrada */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        
+        .logo-card {
+            animation: fadeInUp 0.6s ease-out forwards;
+            opacity: 0;
+        }
+        
+        /* Efecto de chispa al hacer clic */
+        .sparkle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: white;
+            pointer-events: none;
+            animation: sparkle-animation 0.8s ease-out forwards;
+            opacity: 0.8;
+            z-index: 1000;
+        }
+        
+        @keyframes sparkle-animation {
+            0% { transform: translate(0, 0) scale(0); opacity: 0.8; }
+            50% { transform: translate(var(--tx, 0), var(--ty, 0)) scale(1); opacity: 0.9; }
+            100% { transform: translate(var(--tx, 0), var(--ty, 0)) scale(0.2); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1><i class="fas fa-globe-americas"></i> Portal de Enlaces Esenciales</h1>
+        <p class="subtitle">Accede instantáneamente a tus plataformas favoritas. Todos los logos son enlaces directos a los sitios oficiales con diseño responsivo para cualquier dispositivo.</p>
+    </header>
+    
+    <div class="container">
+        <!-- AccuWeather -->
+        <div class="logo-card accuweather" style="animation-delay: 0.1s">
+            <a href="https://www.accuweather.com/es/ar/hernando/8571/weather-forecast/8571" class="logo-link" target="_blank" rel="noopener noreferrer" aria-label="Ir a AccuWeather">
+                <div class="logo-container">
+                    <img src="https://www.google.com/s2/favicons?domain=www.accuweather.com&sz=64" alt="AccuWeather Logo" class="logo-img" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2264%22 height=%2264%22 viewBox=%220 0 64 64%22><circle cx=%2232%22 cy=%2232%22 r=%2230%22 fill=%22%232563eb%22 stroke=%22%231e40af%22 stroke-width=%222%22/><text x=%2232%22 y=%2242%22 font-family=%22Arial%22 font-size=%2228%22 fill=%22white%22 text-anchor=%22middle%22>AW</text></svg>'">
+                </div>
+                <h2 class="logo-name">AccuWeather</h2>
+                <p class="logo-desc">Pronóstico del tiempo en tiempo real para Hernando y el mundo</p>
+            </a>
+        </div>
+        
+        <!-- DevDocs -->
+        <div class="logo-card devdocs" style="animation-delay: 0.18s">
+            <a href="https://devdocs.io/" class="logo-link" target="_blank" rel="noopener noreferrer" aria-label="Ir a DevDocs">
+                <div class="logo-container">
+                    <img src="https://www.google.com/s2/favicons?domain=devdocs.io&sz=64" alt="DevDocs Logo" class="logo-img" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2264%22 height=%2264%22 viewBox=%220 0 64 64%22><rect width=%2264%22 height=%2264%22 fill=%22%2310b981%22/><text x=%2232%22 y=%2242%22 font-family=%22Arial%22 font-size=%2228%22 fill=%22white%22 text-anchor=%22middle%22>DD</text></svg>'">
+                </div>
+                <h2 class="logo-name">DevDocs</h2>
+                <p class="logo-desc">Documentación técnica integrada para desarrolladores</p>
+            </a>
+        </div>
+        
+        <!-- Google Calendar -->
+        <div class="logo-card calendar" style="animation-delay: 0.26s">
+            <a href="https://calendar.google.com/calendar/u/0/r" class="logo-link" target="_blank" rel="noopener noreferrer" aria-label="Ir a Google Calendar">
+                <div class="logo-container">
+                    <img src="https://www.google.com/s2/favicons?domain=calendar.google.com&sz=64" alt="Google Calendar Logo" class="logo-img" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2264%22 height=%2264%22 viewBox=%220 0 64 64%22><circle cx=%2232%22 cy=%2232%22 r=%2230%22 fill=%22%23fb923c%22 stroke=%22%23f97316%22 stroke-width=%222%22/><text x=%2232%22 y=%2242%22 font-family=%22Arial%22 font-size=%2228%22 fill=%22white%22 text-anchor=%22middle%22>GC</text></svg>'">
+                </div>
+                <h2 class="logo-name">Calendario</h2>
+                <p class="logo-desc">Organiza tu agenda personal y profesional</p>
+            </a>
+        </div>
+        
+        <!-- Gmail -->
+        <div class="logo-card gmail" style="animation-delay: 0.34s">
+            <a href="https://mail.google.com/" class="logo-link" target="_blank" rel="noopener noreferrer" aria-label="Ir a Gmail">
+                <div class="logo-container">
+                    <img src="https://www.google.com/s2/favicons?domain=mail.google.com&sz=64" alt="Gmail Logo" class="logo-img" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2264%22 height=%2264%22 viewBox=%220 0 64 64%22><circle cx=%2232%22 cy=%2232%22 r=%2230%22 fill=%22%23ef4444%22 stroke=%22%23dc2626%22 stroke-width=%222%22/><text x=%2232%22 y=%2242%22 font-family=%22Arial%22 font-size=%2228%22 fill=%22white%22 text-anchor=%22middle%22>GM</text></svg>'">
+                </div>
+                <h2 class="logo-name">Gmail</h2>
+                <p class="logo-desc">Correo electrónico seguro con almacenamiento ilimitado</p>
+            </a>
+        </div>
+        
+        <!-- YouTube -->
+        <div class="logo-card youtube" style="animation-delay: 0.42s">
+            <a href="https://www.youtube.com/" class="logo-link" target="_blank" rel="noopener noreferrer" aria-label="Ir a YouTube">
+                <div class="logo-container">
+                    <img src="https://www.google.com/s2/favicons?domain=www.youtube.com&sz=64" alt="YouTube Logo" class="logo-img" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2264%22 height=%2264%22 viewBox=%220 0 64 64%22><rect width=%2264%22 height=%2264%22 fill=%22%23ef4444%22/><circle cx=%2232%22 cy=%2232%22 r=%2228%22 fill=%22white%22/><polygon points=%2228,22 44,32 28,42%22 fill=%22%23ef4444%22/></svg>'">
+                </div>
+                <h2 class="logo-name">YouTube</h2>
+                <p class="logo-desc">Videos, música y contenido de creadores globales</p>
+            </a>
+        </div>
+        
+        <!-- Pinterest -->
+        <div class="logo-card pinterest" style="animation-delay: 0.5s">
+            <a href="https://ar.pinterest.com/" class="logo-link" target="_blank" rel="noopener noreferrer" aria-label="Ir a Pinterest">
+                <div class="logo-container">
+                    <img src="https://www.google.com/s2/favicons?domain=ar.pinterest.com&sz=64" alt="Pinterest Logo" class="logo-img" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2264%22 height=%2264%22 viewBox=%220 0 64 64%22><circle cx=%2232%22 cy=%2232%22 r=%2230%22 fill=%22%23ec4899%22 stroke=%22%23db2777%22 stroke-width=%222%22/><text x=%2232%22 y=%2242%22 font-family=%22Arial%22 font-size=%2228%22 fill=%22white%22 text-anchor=%22middle%22>P</text></svg>'">
+                </div>
+                <h2 class="logo-name">Pinterest</h2>
+                <p class="logo-desc">Descubre ideas creativas e inspiración visual</p>
+            </a>
+        </div>
+        
+        <!-- Google Classroom -->
+        <div class="logo-card classroom" style="animation-delay: 0.58s">
+            <a href="https://classroom.google.com/" class="logo-link" target="_blank" rel="noopener noreferrer" aria-label="Ir a Google Classroom">
+                <div class="logo-container">
+                    <img src="https://www.google.com/s2/favicons?domain=classroom.google.com&sz=64" alt="Google Classroom Logo" class="logo-img" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2264%22 height=%2264%22 viewBox=%220 0 64 64%22><circle cx=%2232%22 cy=%2232%22 r=%2230%22 fill=%22%2322c55e%22 stroke=%22%2316a34a%22 stroke-width=%222%22/><text x=%2232%22 y=%2242%22 font-family=%22Arial%22 font-size=%2228%22 fill=%22white%22 text-anchor=%22middle%22>C</text></svg>'">
+                </div>
+                <h2 class="logo-name">Classroom</h2>
+                <p class="logo-desc">Plataforma educativa para instituciones y estudiantes</p>
+            </a>
+        </div>
+        
+        <!-- y2mate -->
+        <div class="logo-card y2mate" style="animation-delay: 0.66s">
+            <a href="https://y2mate.nu/es-BHAw/" class="logo-link" target="_blank" rel="noopener noreferrer" aria-label="Ir a y2mate">
+                <div class="logo-container">
+                    <img src="https://www.google.com/s2/favicons?domain=y2mate.nu&sz=64" alt="y2mate Logo" class="logo-img" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2264%22 height=%2264%22 viewBox=%220 0 64 64%22><rect width=%2264%22 height=%2264%22 fill=%22%237c3aed%22/><text x=%2232%22 y=%2242%22 font-family=%22Arial%22 font-size=%2224%22 fill=%22white%22 text-anchor=%22middle%22>y2</text></svg>'">
+                </div>
+                <h2 class="logo-name">y2mate</h2>
+                <p class="logo-desc">Descarga videos y audio de plataformas de streaming</p>
+            </a>
+        </div>
+    </div>
+    
+    <footer>
+        <p><i class="fas fa-shield-alt"></i> Todos los enlaces dirigen a sitios oficiales • Diseño 100% responsive • Creado con HTML5 y CSS3 moderno</p>
+        <div class="footer-note">
+            <i class="fas fa-lightbulb"></i> ¡Haz clic en cualquier logo para acceder al servicio! Los favicons se cargan desde el servicio oficial de Google para máxima compatibilidad.
+        </div>
+    </footer>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Activar animaciones de entrada
+            const cards = document.querySelectorAll('.logo-card');
+            cards.forEach(card => {
+                card.style.opacity = '1';
+            });
+            
+            // Efecto de chispas al hacer clic
+            document.addEventListener('click', (e) => {
+                if (e.target.closest('.logo-card')) {
+                    createSparkle(e.clientX, e.clientY);
+                }
+            });
+            
+            function createSparkle(x, y) {
+                const sparkle = document.createElement('div');
+                sparkle.classList.add('sparkle');
+                sparkle.style.left = `${x}px`;
+                sparkle.style.top = `${y}px`;
+                
+                // Dirección aleatoria para la chispa
+                const angle = Math.random() * Math.PI * 2;
+                const distance = 30 + Math.random() * 40;
+                sparkle.style.setProperty('--tx', `${Math.cos(angle) * distance}px`);
+                sparkle.style.setProperty('--ty', `${Math.sin(angle) * distance}px`);
+                
+                document.body.appendChild(sparkle);
+                
+                // Eliminar después de la animación
+                setTimeout(() => {
+                    sparkle.remove();
+                }, 800);
+            }
+            
+            // Efecto hover mejorado
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', () => {
+                    card.style.zIndex = '30';
+                });
+                
+                card.addEventListener('mouseleave', () => {
+                    card.style.zIndex = '5';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
